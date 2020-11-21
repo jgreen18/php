@@ -19,6 +19,16 @@ $categories = $categoryController->get();
 		.he th,tr,thead,tbody,td{
 			border-style: solid;
 		}
+		#storeForm{
+
+		}
+
+		#updateForm{
+			display: none;
+		}
+		#remove{
+			background-color: red;
+		}
 	</style>
 </head>
 <body>
@@ -35,32 +45,44 @@ $categories = $categoryController->get();
 				<th>
 					description
 				</th>
+				<th>
+					Actions
+				</th>
 
 			</thead>
 			<tbody>
+<?php foreach ($categories as $category): ?>
 
-				<?php 
-				foreach ($categories as $category) {
-					echo "<tr>
-						<td>
-							".$category['id']."
-						</td>
-						<td>
-							".$category['name']."
-						</td>
-						<td>
-							".$category['description']."
-						</td>
-					</tr>";
-				}
-				 ?>
+				<tr>
+					
+					<td>
+						<?= $category['id'] ?>
+					</td>
+					<td>
+						<?= $category['name'] ?>
+					</td>
+					<td>
+						<?= $category['description'] ?>
+					</td>
+					<td>
+						<button onclick="edit(<?= $category['id'] ?>,'<?= $category['name'] ?>','<?= $category['description'] ?>','<?= $category['status'] ?>')">
+                            Edit category
+                        </button>
+                        <button id="remove" onclick="remove(<?= $category['id'] ?>)">
+                            delete category
+                        </button>
+					</td>
+
+				</tr>
+					
+				<?php endforeach ?>
 
 
 					
 			</tbody>
 		</table>
 
-		<form action="../app/categoryController.php" method="POST">
+		<form id="storeForm" action="../app/categoryController.php" method="POST">
             <fieldset>
 
                 <legend>
@@ -94,7 +116,80 @@ $categories = $categoryController->get();
 
             </fieldset>
         </form>
-	</div>
 
+        <form id="updateForm" action="../app/categoryController.php" method="POST">
+            <fieldset>
+
+                <legend>
+                   Edit Category
+                </legend>
+
+                <label>
+                    Name
+                </label>
+                <input type="text"  name="name" placeholder="terror" required="" id="name"> 
+                
+                <br>
+
+                <label>
+                    Description
+                </label>
+                <textarea placeholder="write here" name="description" rows="5" id="description" required=""></textarea>
+                <br>
+
+                <label>
+                    Status
+                </label>
+                <select name="status" id="status">
+                    <option> active </option>
+                    <option> inactive </option>
+                </select>
+                <br>
+
+                <button type:="submit" >Save Category</button>
+
+                <input type=hidden name="action" value="update">
+                <input type="text"  name="id" placeholder="terror" required="" id="id" hidden="hidden">
+                
+
+
+            </fieldset>
+        </form>
+
+         <form id="destroyForm" action="../app/categoryController.php" method="POST">
+            <input type="hidden" name="action" value="destroy">
+            <input type="hidden" name="id" id="id_destroy">
+
+        </form>
+	</div>
+<script type="text/javascript">
+	
+	
+	
+	function edit(id,name,description,status){
+
+	document.getElementById('storeForm').style.display="none";
+	document.getElementById('updateForm').style.display="block";
+
+	document.getElementById('name').value= name;
+	document.getElementById('description').value= description;
+	document.getElementById('status').value= status;
+	document.getElementById('id').value= id;
+
+		// alert(name)
+		// alert(description)
+		// alert(status)
+		// alert("hola: "+ id)
+
+	}
+	function remove(id){
+		var confirm = prompt("Si quiere eliminar el registro, escriba "+ id);
+		if (confirm == id) 
+		{
+			document.getElementById('id_destroy').value= id;
+			document.getElementById('destroyForm').submit();
+		}
+	}
+</script>
 </body>
 </html>
