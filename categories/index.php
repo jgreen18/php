@@ -4,7 +4,17 @@ $categoryController = new CategoryController();
 
 $categories = $categoryController->get();
 
-#echo json_encode($categories);
+// if (!isset($_SESSION) || !isset($_SESSION[id])) {
+// 		header("Location:../");
+		
+// 	};
+// 	echo json_encode($categories);
+
+// if (isset($_SESSION)==false || 
+// 		isset($_SESSION['id'])==false) {
+		
+// 		header("Location:../");
+// 	}
 	
  ?>
 <!DOCTYPE html>
@@ -34,6 +44,19 @@ $categories = $categoryController->get();
 <body>
 	<div class="he">
 		<h1>categories</h1>
+
+		<?php 
+
+			if (isset($_SESSION) && isset($_SESSION['error'])) {
+
+			echo "<h3> Error: ".$_SESSION['error']."</h3>";
+			unset($_SESSION['error']);
+
+			}
+
+		?> 
+
+
 		<table>
 			<thead>
 				<th>
@@ -176,11 +199,7 @@ $categories = $categoryController->get();
 	document.getElementById('status').value= status;
 	document.getElementById('id').value= id;
 
-		// alert(name)
-		// alert(description)
-		// alert(status)
-		// alert("hola: "+ id)
-
+		
 	}
 	function remove(id){
 		var confirm = prompt("Si quiere eliminar el registro, escriba "+ id);

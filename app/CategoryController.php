@@ -1,7 +1,8 @@
 <?php 
-// if (!isset($_SE)) {
-// 	# code...
-// }
+if (!isset($_SESSION)) {
+	session_start();
+}
+
 include "connectionController.php";
 if (isset($_POST['action'])) {
 
@@ -71,22 +72,23 @@ class CategoryController{
 				$query = "insert into categories (name,description,status) values(?,?,?)";
 				$prepared_query = $conn->prepare($query);
 				$prepared_query->bind_param('sss',$name,$description,$status);
-				var_dump($prepared_query->execute());
+				
 				if ($prepared_query->execute()) {
-					
+					$_SESSION['success'] = "el registro se ha guardado correctamente";
 					header("Location:". $_SERVER['HTTP_REFERER'] );
 
 				}else{
-				
+					$_SESSION['error'] = 'verifique los datos envíados';
 					header("Location:". $_SERVER['HTTP_REFERER'] );
 				}
 
 			}else{
-			
+				$_SESSION['error'] = 'verifique la información del formulario';
 				header("Location:". $_SERVER['HTTP_REFERER'] );
 			}
 
 		}else{
+			$_SESSION['error'] = 'verifique la conexión a la base de datos';
 		
 			header("Location:". $_SERVER['HTTP_REFERER'] );
 		}
